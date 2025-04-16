@@ -6,7 +6,7 @@ import IconButton  from "@mui/material/IconButton";
 
 const Header = () => {
     return(
-        <AppBar sx={{backgroundColor:'red'}}>
+        <AppBar sx={{backgroundColor:''}}>
             <Toolbar sx={{display:'flex', justifyContent:'flex-end',  }}>
                 <IconButton color="inherit" onClick={()=>{console.log("Cliquei")}}>
                     <AccountCircleIcon fontSize="Large"/>
