@@ -15,6 +15,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Button, IconButton, Alert, Snackbar } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { Delete } from "@mui/icons-material";
+import ModalCriarIngresso from "../components/ModalCriarIngresso";
 
 function listEventos() {
   const [eventos, setEventos] = useState([]);
@@ -71,9 +72,16 @@ function listEventos() {
         <TableCell align="center">{evento.descricao}</TableCell>
         <TableCell align="center">{evento.data_hora}</TableCell>
         <TableCell align="center">{evento.local}</TableCell>
+
         <TableCell align="center">
           <IconButton onClick={() => deleteEvento(evento.id_evento)}>
             <DeleteOutlineIcon color="error" />
+          </IconButton>
+        </TableCell>
+
+        <TableCell align="center">
+          <IconButton onClick={() => abrirModalIngresso(evento)}>
+            Adicionar
           </IconButton>
         </TableCell>
       </TableRow>
@@ -91,25 +99,46 @@ function listEventos() {
     getEventos();
   }, []);
 
+  const [eventoSelecionado, setEventoSelecionado] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const abrirModalIngresso = (evento) => {
+    setEventoSelecionado(evento);
+    setModalOpen(true);
+  };
+
+  const fecharModalIngresso = () => {
+    setModalOpen(false);
+    setEventoSelecionado("");
+  };
+
   return (
     <div>
       <Snackbar
         open={alert.open}
         autoHideDuration={3000}
         onClose={handleCloseAlert}
-        anchorOrigin={{vertical:"top", horizontal:"center"}}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{width:"100%"}}>
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
           {alert.message}
         </Alert>
       </Snackbar>
+
+      <ModalCriarIngresso
+        open={modalOpen}
+        onClose={fecharModalIngresso}
+        eventoSelecionado={eventoSelecionado}
+      />
 
       {eventos.length === 0 ? (
         <h1>Carregando eventos</h1>
       ) : (
         <div>
-          
-
           <h5>Lista de eventos</h5>
           <TableContainer component={Paper} style={{ margin: "2px" }}>
             <Table size="small">
@@ -122,6 +151,7 @@ function listEventos() {
                   <TableCell align="center">Data e hora</TableCell>
                   <TableCell align="center">Local</TableCell>
                   <TableCell align="center">Excluir</TableCell>
+                  <TableCell align="center">Criar ingresso</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>{listEventos}</TableBody>
