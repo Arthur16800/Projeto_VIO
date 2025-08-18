@@ -14,7 +14,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 // import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, IconButton, Alert, Snackbar } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import ConfirmDelete from "../components/ConfirmDelete"
+import ConfirmDelete from "../components/ConfirmDelete";
 
 function listUsers() {
   const [users, setUsers] = useState([]);
@@ -41,13 +41,12 @@ function listUsers() {
   const navigate = useNavigate();
 
   const openDeleteModal = (id, name) => {
-    setUserToDelete({id: id, name: name})
+    setUserToDelete({ id: id, name: name });
     setModalOpen(true);
-  }
+  };
 
   const [userToDelete, setUserToDelete] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  
 
   async function getUsers() {
     // Chamada da Api
@@ -68,7 +67,6 @@ function listUsers() {
       await getUsers();
       showAlert("success", "Usuário excluído com sucesso!");
       setModalOpen(false);
-
     } catch (error) {
       console.log("erro ao deletar usuario.", error);
       showAlert("error", error.response.data.error);
@@ -83,7 +81,9 @@ function listUsers() {
         <TableCell align="center">{user.email}</TableCell>
         <TableCell align="center">{user.cpf}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={() => openDeleteModal(user.id_usuario, user.name)}>
+          <IconButton
+            onClick={() => openDeleteModal(user.id_usuario, user.name)}
+          >
             <DeleteOutlineIcon color="error" />
           </IconButton>
         </TableCell>
@@ -108,26 +108,28 @@ function listUsers() {
         open={alert.open}
         autoHideDuration={3000}
         onClose={handleCloseAlert}
-        anchorOrigin={{vertical:"top", horizontal:"center"}}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseAlert} severity={alert.severity} sx={{width:"100%"}}>
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alert.severity}
+          sx={{ width: "100%" }}
+        >
           {alert.message}
         </Alert>
       </Snackbar>
 
-      <ConfirmDelete 
-      open={modalOpen}
-      userName={userToDelete.name}
-      onConfirm={deleteUser}
-      onClose={()=>setModalOpen(false)}
+      <ConfirmDelete
+        open={modalOpen}
+        userName={userToDelete.name}
+        onConfirm={deleteUser}
+        onClose={() => setModalOpen(false)}
       />
 
       {users.length === 0 ? (
         <h1>Carregando usuários</h1>
       ) : (
         <div>
-          
-
           <h5>Lista de usuários</h5>
           <TableContainer component={Paper} style={{ margin: "2px" }}>
             <Table size="small">
@@ -149,6 +151,9 @@ function listUsers() {
           </Button>
         </div>
       )}
+      <Link to="/eventos">Listar Eventos</Link>
+      <br></br>
+      <Link to="/createevent">criar Eventos</Link>
     </div>
   );
 }
