@@ -33,7 +33,7 @@ function Dashboard(){
                 const responseEventos = await sheets.getEventos();
                 const responseUsuarios = await sheets.getUsers();
                 setEventos(responseEventos.data.events);
-                setUsuarios(responseUsuarios.users);
+                setUsuarios(responseUsuarios.data.users);
             } catch(error){
                 console.error(error)
             }
@@ -59,11 +59,30 @@ function Dashboard(){
         ],
     }
 
+    const usuariosPorMes = {};
+  usuarios.forEach(u => {
+    const mes = new Date(u.data_nascimento).getMonth() + 1;
+    usuariosPorMes[mes] = (usuariosPorMes[mes] || 0) + 1;
+  });
+
+  const pieData = {
+    labels: Object.keys(usuariosPorMes).map(m => `Mês ${m}`),
+    datasets: [
+      {
+        data: Object.values(usuariosPorMes),
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4CAF50", "#FF9800", "#9C27B0"]
+      }
+    ]
+  };
+
+
     return(
         <div style={{padding:60}}>
             <h2>Dashboards</h2>
             <div style={{width: 600, marginBottom: 40}}> <Bar data={barData}/> </div>
-            <div></div>
+            <div style={{width: 600, marginBottom: 40}}>
+                <Pie data={pieData}/>
+            </div>
         </div>
     )
 };
